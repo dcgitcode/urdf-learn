@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>URDF 模型工作台 · 读代码，看结构</title><link rel="stylesheet" href="./lab.css"></head>
+<body data-mobile-pane="source">
+<header class="topbar"><div class="brand"><span class="brandmark">U</span><div><strong>URDF 模型工作台</strong><span>读代码 · 看结构 · 改参数</span></div></div><div class="header-right"><label class="sr-only" for="model">实验模型</label><select id="model" disabled><option value="arm">SO-ARM100 教学模型</option><option value="my_rebot">我的机器人 my_rebot</option><option value="simple">两连杆入门模型</option></select><a href="./index.html">原版 ↗</a></div></header>
+<nav class="compact-tabs" aria-label="工作区切换"><button id="show-model" aria-pressed="false">模型与操作</button><button id="show-source" aria-pressed="true">完整 URDF</button><a href="./xml-editor.html" style="align-self:center;margin-left:auto">从零写 XML ↗</a></nav>
+<main>
+<section class="model-pane" aria-label="模型与关节操作">
+  <div class="view-heading"><div><span class="eyebrow">三维模型</span><h1 id="view-title">SO-ARM100</h1></div><button id="home">适合视窗</button></div>
+  <div id="viewport"><div id="loading" role="status">正在加载机器人…</div></div>
+  <div class="view-tools"><label><input type="checkbox" id="axes" checked> 坐标轴</label><label><input type="checkbox" id="trail"> 轨迹</label><button id="clear-trail" class="text-button">清除轨迹</button><span class="axis-legend"><b class="x">X</b><b class="y">Y</b><b class="z">Z</b></span></div>
+  <div class="selection-bar"><label for="joint-picker">当前关节</label><select id="joint-picker" disabled></select><button id="locate-code" class="primary" disabled>定位代码 ↗</button></div>
+  <div class="model-controls">
+    <details id="joint-controls" open><summary>调节关节角度 <span>拖动滑块，看对应部件运动</span></summary><div class="section-head"><span>旋转角度 / °</span><button id="reset" class="text-button" disabled>全部归零</button></div><div id="joints" class="joint-list"><p class="hint">正在准备关节…</p></div></details>
+    <details id="structure"><summary>修改选中关节的结构 <span>连接位置 / 转轴 / 限位</span></summary><p class="hint">应用后，完整 URDF 同步更新，模型角度归零。</p>
+      <form id="parameters"><p id="selected-name" class="selected-name">等待选择关节</p><div class="field-line"><span>joint/origin · 相对父连杆的位置（mm）</span><div id="origin-fields" class="triple"></div></div><label for="axis">axis · 关节局部转动轴</label><select id="axis"><option value="1 0 0">X 轴</option><option value="0 1 0">Y 轴</option><option value="0 0 1">Z 轴</option></select><div class="limits"><label>下限 °<input id="lower" type="number" step="any" required></label><label>上限 °<input id="upper" type="number" step="any" required></label></div><button type="submit" id="apply" class="primary" disabled>应用参数，更新 URDF</button></form>
+    </details>
+    <details id="measurements"><summary>末端测量与实验记录 <span>需要对照实验时再展开</span></summary><p class="hint" id="tip-definition">测量点相对基座。</p>
+      <div class="coordinates"><span>X <output id="px">—</output></span><span>Y <output id="py">—</output></span><span>Z <output id="pz">—</output></span><small>mm</small></div><div class="delta">相对基线 <output id="distance">—</output> mm <div id="delta-components"></div></div>
+      <div class="button-row"><button id="baseline" disabled>保存基线</button><button id="restore" disabled>回到基线</button><button id="demo" disabled>演示一次</button></div><label for="note">实验说明</label><input id="note" maxlength="120" placeholder="例如：只改第二关节 10°"><div class="button-row"><button id="record" disabled>记录当前实验</button><button id="export" disabled>导出 CSV ↓</button></div><p class="hint">本页记录 <span id="record-count">0</span> 条，关闭前请导出。</p><ol id="records"><li class="empty">尚无记录。</li></ol>
+    </details><p class="boundary">结构与运动学可视化 · 未计算碰撞、重力与接触。</p>
+  </div>
+</section>
+<section class="source-pane" aria-label="完整 URDF 源码">
+  <div class="source-heading"><div><span class="eyebrow" id="file-origin">完整文件 · 与当前模型一致</span><h2 id="source-filename">so_arm100_teaching.urdf</h2></div><div class="source-actions"><button id="edit-source" disabled>编辑全文</button><button id="copy-source" disabled>复制全文</button><button id="export-urdf" disabled>下载 ↓</button></div></div>
+  <div class="source-toolbar" id="source-toolbar"><label class="sr-only" for="source-search">搜索 URDF</label><input id="source-search" type="search" placeholder="搜索 link、joint 或参数…"><span id="search-result" aria-live="polite"></span><button id="search-next" aria-label="下一个搜索结果">↓</button><button id="source-top">文件开头 ↑</button></div>
+  <div class="source-context" id="source-context"><strong id="code-selection">选择代码或模型，查看对应关系</strong><p id="code-explanation">点击 link / joint 代码块或三维部件，双向定位。</p></div>
+  <div id="source-editor" class="source-editor" hidden><textarea id="editor-text" spellcheck="false" aria-label="编辑 URDF 全文"></textarea><div class="editor-actions"><span class="hint">编辑后点击「应用」重建模型；改动只在本页生效，不覆盖原文件。</span><button id="editor-reset">恢复当前文本</button><button id="editor-cancel">取消</button><button id="editor-apply" class="primary">应用到模型</button></div></div>
+  <div id="source-code" class="source-code" tabindex="0" aria-label="带行号的完整 URDF 文件"><p class="hint">正在读取完整 URDF…</p></div>
+  <div class="source-footer"><span id="source-stats">—</span><span>m / rad · 结构参数，非当前关节角度</span></div>
+</section>
+</main><footer><span id="status" role="status" aria-live="polite">准备模型…</span><span>拖动旋转 · 滚轮缩放 · 点击部件定位代码</span></footer><script type="module" src="./lab.js"></script>
+</body></html>

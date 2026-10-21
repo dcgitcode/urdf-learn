@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="three_joint_arm">
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.02" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.12 0.12 0.04"/>
+      </geometry>
+      <material name="base_gray">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <link name="column_link">
+    <visual>
+      <origin xyz="0 0 0.03" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.025" length="0.06"/>
+      </geometry>
+      <material name="column_orange">
+        <color rgba="1 0.55 0.1 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="joint1_yaw" type="revolute">
+    <parent link="base_link"/>
+    <child link="column_link"/>
+    <origin xyz="0 0 0.04" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.57" upper="1.57" effort="1" velocity="1"/>
+  </joint>
+
+  <link name="upper_arm_link">
+    <visual>
+      <origin xyz="0.06 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.12 0.025 0.025"/>
+      </geometry>
+      <material name="upper_blue">
+        <color rgba="0.15 0.45 0.95 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="joint2_shoulder" type="revolute">
+    <parent link="column_link"/>
+    <child link="upper_arm_link"/>
+    <origin xyz="0 0 0.06" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.2" upper="1.2" effort="1" velocity="1"/>
+  </joint>
+
+  <link name="forearm_link">
+    <visual>
+      <origin xyz="0.05 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.10 0.02 0.02"/>
+      </geometry>
+      <material name="forearm_green">
+        <color rgba="0.15 0.75 0.4 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="joint3_elbow" type="revolute">
+    <parent link="upper_arm_link"/>
+    <child link="forearm_link"/>
+    <origin xyz="0.12 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.5" upper="1.5" effort="1" velocity="1"/>
+  </joint>
+</robot>

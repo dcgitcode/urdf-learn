@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="my_rebot">
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="1 1 1"/>
+            </geometry>
+            <material name="base_grey">
+                <color rgba="0.65 0.65 0.65 1"/>
+            </material>
+        </visual>
+    </link>
+
+    <link name="tool0">
+        <visual>
+            <geometry>
+                <box size="0.1 0.1 0.1"/>
+            </geometry>
+            <material name="tool_orange">
+                <color rgba="0.78 0.36 0.18 1"/>
+            </material>
+        </visual>
+    </link>
+
+    <joint name="base_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="tool0"/>
+        <origin xyz="0 0 0.55" rpy="0 0 0"/>
+    </joint>
+</robot>

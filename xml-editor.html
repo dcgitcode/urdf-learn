@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>从零写 URDF · XML 实时预览</title><link rel="stylesheet" href="./xml-editor.css"></head>
+<body>
+<header><div class="identity"><span class="logo">&lt;/&gt;</span><div><h1>从零写 URDF</h1><p>写一段 XML，看机器人多出一个部件。</p></div></div><div class="header-actions"><span class="offline">浏览器内运行</span><a id="workbench-link" href="./lab.html">模型工作台 ↗</a><button id="open-xml">打开 XML</button><button id="save-xml">保存 URDF ↓</button></div></header>
+<section class="lesson-bar" aria-label="从零搭建参考步骤"><label for="lesson">搭建参考</label><select id="lesson"><option value="0">0 · 只有 robot 外壳</option><option value="1">1 · 写出底座 link</option><option value="2">2 · 加入大臂和 shoulder 关节</option><option value="3">3 · 加入小臂和 elbow 关节</option><option value="4">4 · 添加固定的工具端</option></select><button id="load-lesson">载入此步示例</button><button id="undo-replace" disabled>撤销替换</button><span>示例会替换源码，可撤销；也可以完全自己写。</span></section>
+<main>
+  <section class="editor-pane" aria-label="XML 编辑区"><div class="pane-heading"><div><span class="eyebrow">01 / 编写</span><h2>完整 XML 源码</h2></div><div class="editor-tools"><label><input id="auto-preview" type="checkbox" checked> 自动预览</label><button id="apply-xml" class="primary">预览当前源码 <kbd>Ctrl ↵</kbd></button></div></div>
+    <div class="completion-toolbar"><span>标签 / 属性 / 连杆名 / STL 路径补全</span><button id="show-completion">智能提示 <kbd>Ctrl Space</kbd></button></div>
+    <div class="code-editor"><pre id="line-numbers" aria-hidden="true">1</pre><textarea id="xml-input" aria-label="URDF XML 源码" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off"></textarea></div>
+    <div id="xml-context-hint" class="xml-context-hint">输入 &lt; 查看可用标签；Ctrl+Space 手动补全。</div>
+    <div id="diagnostic" role="status" aria-live="polite"><strong id="diagnostic-title">正在准备编辑器…</strong><p id="diagnostic-detail"></p></div>
+    <div class="editor-footer"><span id="line-count">—</span><span id="draft-state">草稿仅保存在本机</span><span>长度 m · 角度 rad · Tab 缩进</span></div>
+  </section>
+  <section class="preview-pane" aria-label="机器人实时预览"><div class="pane-heading"><div><span class="eyebrow">02 / 观察</span><h2 id="robot-title">my_arm</h2></div><div class="preview-tools"><span id="preview-state" class="state">等待预览</span><button id="fit-view">适合视窗</button></div></div>
+    <div id="editor-viewport"><div id="empty-model"><strong>从一个空机器人开始</strong><p>在左侧 robot 中写入 link 和 visual，<br>这里就会出现第一个部件。</p></div></div>
+    <div class="preview-bottom"><div class="view-options"><label><input id="show-axes" type="checkbox" checked> 连杆坐标轴</label><label><input id="show-grid" type="checkbox" checked> 地面网格</label><span>一格 50 mm · Z 向上</span></div>
+      <div class="model-summary"><span id="model-count">0 links · 0 joints</span><button id="zero-joints" disabled>关节归零</button></div><div id="editor-joints"><p class="hint">写入 revolute、continuous 或 prismatic 关节后，会自动出现滑块。</p></div>
+      <details id="learning-note" open><summary>这一步可以观察什么？</summary><p id="lesson-note"></p></details>
+      <details class="assets" open><summary>STL 外形资源</summary><p>网页模式：meshes/AAA.stl 自动对应项目 public/URDF/meshes/AAA.stl。离线模式：选择模型文件夹后，按相对路径读取。</p><div class="asset-buttons"><button id="open-folder">选择模型文件夹</button><button id="open-meshes">选择 STL 文件</button></div><span id="mesh-count">项目外形按需加载</span><p class="hint">文件夹建议选择 public/URDF；也可选择自己的 URDF 与 meshes 所在目录。STL 直接在浏览器解析，本机导入不上传。</p></details>
+      <p class="boundary">当前是结构与关节运动预览，未计算重力、碰撞或物理抓取。</p>
+    </div>
+  </section>
+</main>
+<input id="xml-file" type="file" accept=".urdf,.xml,text/xml,application/xml" hidden><input id="mesh-files" type="file" accept=".stl" multiple hidden><input id="model-folder" type="file" webkitdirectory multiple hidden>
+<script type="module" src="./xml-editor.js"></script>
+</body></html>
